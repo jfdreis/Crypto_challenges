@@ -60,14 +60,14 @@ pub fn xor_hexa_bytes_get_bytes(s: &str, v: &Vec<u8>)-> Vec<u8>{
     ans
 }
 
-pub fn xor_hexa_bytes_get_string(s: &str, v: &Vec<u8>)-> String{
+pub fn xor_hexa_bytes_get_string(s: &str, v: &Vec<u8>)-> Option<String>{
     let s_bytes = hex::decode(&s).expect("Invalid hexadecimal base input");
     let ans: Vec<u8> = s_bytes.iter().zip(v).map(|(a, b)| a ^ b).collect();
-    let t = match str::from_utf8(&ans) {
-        Ok(v) => v,
-        Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
-    };
-    t.to_string()
+    if let Ok(utf8_string) = String::from_utf8(ans.clone()) {
+        Some(utf8_string)
+    } else {
+        None
+    }
 }
 
 
@@ -93,3 +93,27 @@ pub fn percentage_letters_in_text(v: Vec<u8>)-> f64 {
     a/v.len() as f64
 }
 
+
+//The next function return a vector will all the character writen as u8
+pub fn all_chars_in_u8()->Vec<u8>{
+    let mut all_chars: Vec<u8>=vec![];
+    for c in 32..=126{
+        all_chars.push(c);
+    }
+    for c in 128..=255{
+        all_chars.push(c);
+    }
+    all_chars
+}
+//letters  and space in u8
+pub fn letters_space_in_u8()->Vec<u8>{
+    let mut letters: Vec<u8> =vec![32]; // it as the key for the space
+
+    for letter in 65..=90 {     //adding the keys for uppercase letters
+        letters.push(letter);
+    }
+    for letter in 97..=122 {     //adding the keys for lowercase letters
+        letters.push(letter);
+    }
+    letters
+}

@@ -42,3 +42,12 @@ You can do this by hand. But don't: write code to do it for you.
 How? Devise some method for "scoring" a piece of English plaintext. Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 
 *I did not use character frequency. I may try that latter on*
+
+#Detect single-character XOR
+
+One of the 60-character strings in this file [this file](https://cryptopals.com/static/challenge-data/4.txt) has been encrypted by single-character XOR.
+
+Find it.
+
+(Your code from #3 should help.)
+
