@@ -45,7 +45,7 @@ How? Devise some method for "scoring" a piece of English plaintext. Character fr
 
 #Detect single-character XOR
 
-One of the 60-character strings in this file [this file](https://cryptopals.com/static/challenge-data/4.txt) has been encrypted by single-character XOR.
+One of the 60-character strings in [this file](https://cryptopals.com/static/challenge-data/4.txt) has been encrypted by single-character XOR.
 
 Find it.
 
