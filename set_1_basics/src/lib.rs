@@ -17,18 +17,40 @@ pub fn hex_to_base64 (s: &str)-> String { //want &str because I do not need owne
     String::from(s_in_base64)
 }
 
+pub fn string_to_hex(s: &str)-> String {
+    hex::encode(s)
+}
+
 pub fn fixed_xor(s: &str, t:  &str) -> String {
     //convert hexadecimal to bytes
     let s_bytes = hex::decode(&s).expect("Invalid hexadecimal base input");
     let t_bytes = hex::decode(&t).expect("Invalid hexadecimal base input");
     
-    // Perform the XOR operation on each pair of bytes
-    let xor_result: Vec<u8> = s_bytes.iter().zip(&t_bytes).map(|(a, b)| a ^ b).collect();    
+    // Perform the XOR operation on each pair of bytes.
+    let xor_result: Vec<u8> = s_bytes.iter().zip(&t_bytes).map(|(a, b)| a ^ b).collect();    // 
+    // using "izip!" that way can XOR byte sequences of different lengths
     
     // Convert the result back to a hexadecimal string
     let xor_hex: String = xor_result.iter().map(|byte| format!("{:02x}", byte)).collect();
     xor_hex
    
+}
+
+pub fn cyclic_repeat(s: &str, desired_length: usize) -> String {
+    let s_len = s.len();
+    if s_len == 0 || desired_length == 0 {
+        return String::new();
+    }
+
+    let repetitions = desired_length / s_len;
+    let remainder = desired_length % s_len;
+
+    let repeated = s.repeat(repetitions);
+    let remainder_part = &s[0..remainder];
+
+    let result = format!("{}{}", repeated, remainder_part);
+
+    result
 }
 
 pub fn hex_to_ascii(s: &str) -> String {
@@ -69,6 +91,9 @@ pub fn xor_hexa_bytes_get_string(s: &str, v: &Vec<u8>)-> Option<String>{
         None
     }
 }
+
+
+
 
 
 //This function get a string in hexadecimal and determines the percentage

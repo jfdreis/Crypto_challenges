@@ -50,7 +50,7 @@ fn main() {
     }
     println!("The possible key(s) is(are) {:?}",possibilities);
     let mut key_v: Vec<u8>=vec![];
-    // Here we print everything that we obtain while XORing against the entries in possibilities
+    // Here we have everything that we obtain while XORing against the entries in possibilities
     for i in possibilities {
         while key_v.len() < s.len()/2 {
             key_v.push(i);
@@ -118,9 +118,21 @@ fn main() {
         //}
     }
     
-    //let s="581e0829214202063d70030845e5301f5a5212ed0818e22f120b211b171b";
-    //let s_ascii= hex_to_ascii(s);
-    //println!("{:?}",s_ascii);
+    println!("Challenge 5 of Set 1");
+
+    //Input
+    let s="Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
+    println!("{s}");
+    let s_hex= string_to_hex(s);
+    let mut key=string_to_hex("ICE");
+    let m=s_hex.len();
+    key=cyclic_repeat(&key, m);
+    let ans=fixed_xor(&s_hex, &key);
+    println!("{ans}");
+    if ans=="0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f"{
+        println!("right answer");
+    }
+
     
 
 }
