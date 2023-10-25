@@ -133,10 +133,32 @@ fn main() {
         println!("right answer");
     }
 
-    
+    println!("Challenge 6 of Set 1");
 
-}
+    //computing Hamming distance. Checking it is working well
+    let s=string_to_hex("this is a test");
+    let t=string_to_hex("wokka wokka!!!");
+    let d=hamming_distance(&s, &t);
+    println!("{d}");
+
+    let file_path = "src/list_challenge_6.txt";
+    let text= match fs::read_to_string(file_path) {
+        Ok(contents) => {
+            // Successfully read the file, 'contents' contains the file's content as a string
+            contents
+        }
+        Err(e) => {
+            // Handle the error, e.g., file not found, permissions issue, etc.
+            println!("Error reading the file: {}", e);
+            String::new()
+        }
+    };
+    let text_hex=string_to_hex(&text);
     
+    // I will try  to do this:
+    //For each KEYSIZE, take the first KEYSIZE worth of bytes, and the second KEYSIZE worth of bytes, and find the edit distance between them.
+    //Normalize this result by dividing by KEYSIZE.
+}
 
     
 

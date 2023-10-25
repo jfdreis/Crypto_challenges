@@ -28,7 +28,7 @@ pub fn fixed_xor(s: &str, t:  &str) -> String {
     
     // Perform the XOR operation on each pair of bytes.
     let xor_result: Vec<u8> = s_bytes.iter().zip(&t_bytes).map(|(a, b)| a ^ b).collect();    // 
-    // using "izip!" that way can XOR byte sequences of different lengths
+    
     
     // Convert the result back to a hexadecimal string
     let xor_hex: String = xor_result.iter().map(|byte| format!("{:02x}", byte)).collect();
@@ -94,8 +94,6 @@ pub fn xor_hexa_bytes_get_string(s: &str, v: &Vec<u8>)-> Option<String>{
 
 
 
-
-
 //This function get a string in hexadecimal and determines the percentage
 // of the symbols that correspond to lowercase letter and space
 
@@ -141,4 +139,20 @@ pub fn letters_space_in_u8()->Vec<u8>{
         letters.push(letter);
     }
     letters
+}
+
+
+//Function to determine Hamming distance
+pub fn hamming_distance(s: &str,t: &str)-> i32 {
+
+    
+    //convert hexadecimal to bytes
+    let s_bytes = hex::decode(&s).expect("Invalid hexadecimal base input");
+    let t_bytes = hex::decode(&t).expect("Invalid hexadecimal base input");
+    
+    // Perform the XOR operation on each pair of bytes.
+    let xor_result: Vec<u8> = s_bytes.iter().zip(&t_bytes).map(|(a, b)| a ^ b).collect();
+    let distance = xor_result.iter().map(|b| b.count_ones() as i32).sum();
+    distance
+
 }
