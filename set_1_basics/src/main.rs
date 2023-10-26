@@ -140,7 +140,6 @@ fn main() {
     let t=string_to_hex("wokka wokka!!!");
     let d=hamming_distance(&s, &t);
     println!("{d}");
-
     let file_path = "src/list_challenge_6.txt";
     let text= match fs::read_to_string(file_path) {
         Ok(contents) => {
@@ -153,11 +152,47 @@ fn main() {
             String::new()
         }
     };
-    let text_hex=string_to_hex(&text);
-    
+   
     // I will try  to do this:
     //For each KEYSIZE, take the first KEYSIZE worth of bytes, and the second KEYSIZE worth of bytes, and find the edit distance between them.
     //Normalize this result by dividing by KEYSIZE.
+
+    let mut avg_hamming_distance: Vec<f64> =vec![];
+    for keysize in 0..40 {
+        let mut buffer_1 = String::new(); // Store keysize hexadecimal characters.
+        let mut buffer_2 = String::new(); // Store keysize hexadecimal characters.
+        //let text=String::from("abcdefgh");
+        let mut consecutive_hamming_distance: Vec<i32> =vec![];
+        for piece in text.chars() {
+            if buffer_1.len() == keysize{
+                if buffer_2.len() == keysize {
+                    let d=hamming_distance(&string_to_hex(&buffer_1), &string_to_hex(&buffer_2));
+                    consecutive_hamming_distance.push(d);
+                    buffer_1=buffer_2.clone();
+                    buffer_2.clear();
+                    buffer_2.push(piece);
+                    //println!("The Hamming distance vector {:?}",consecutive_hamming_distance);
+                }
+                else {
+                    buffer_2.push(piece);
+                }
+            } else {
+                buffer_1.push(piece);
+            }   
+        }
+        let d=hamming_distance(&string_to_hex(&buffer_1), &string_to_hex(&buffer_2));
+        consecutive_hamming_distance.push(d);
+        let mut k=0;
+        for &a in &consecutive_hamming_distance {
+            k=k+a;
+        }
+        let l=consecutive_hamming_distance.len();
+        println!("{}",keysize);
+        let k=k as f64 /(keysize as f64* l as f64);
+        println!("{k}");
+        avg_hamming_distance.push(k);
+    }
+    
 }
 
     
