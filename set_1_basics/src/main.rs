@@ -152,13 +152,15 @@ fn main() {
             String::new()
         }
     };
+
+    
    
     // I will try  to do this:
     //For each KEYSIZE, take the first KEYSIZE worth of bytes, and the second KEYSIZE worth of bytes, and find the edit distance between them.
     //Normalize this result by dividing by KEYSIZE.
 
     let mut avg_hamming_distance: Vec<f64> =vec![];
-    for keysize in 0..40 {
+    for keysize in 0..40 { //I start in zero because latter on I want to get the keysize corresponding to the minimum hamming distance.
         let mut buffer_1 = String::new(); // Store keysize hexadecimal characters.
         let mut buffer_2 = String::new(); // Store keysize hexadecimal characters.
         //let text=String::from("abcdefgh");
@@ -187,12 +189,20 @@ fn main() {
             k=k+a;
         }
         let l=consecutive_hamming_distance.len();
-        println!("{}",keysize);
+        //println!("{}",keysize);
         let k=k as f64 /(keysize as f64* l as f64);
-        println!("{k}");
+        //println!("{k}");
         avg_hamming_distance.push(k);
     }
-    
+    let mut min=1000000 as f64;
+    for &a in &avg_hamming_distance{
+        if a<min {
+            min=a;
+        }
+    }
+    println!("{}", min);
+    let index = avg_hamming_distance.iter().position(|&r| r == min).unwrap();
+    println!("The probable keysize is {}", index);
 }
 
     
