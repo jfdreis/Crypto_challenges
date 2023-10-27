@@ -17,6 +17,22 @@ pub fn hex_to_base64 (s: &str)-> String { //want &str because I do not need owne
     String::from(s_in_base64)
 }
 
+pub fn base64_to_hex (s: &str)-> String { //want &str because I do not need ownership of the string
+    //Convert this string to bytes.
+    //Note that decode returns a a Result<Vec<u>> we need to take handle the error case.
+    let bytes = match base64::decode(s){
+        Ok(bytes) => bytes,
+        Err(_) => {
+            let a = String::from("Error decoding base64 string: {}");
+            return a;
+        }
+    };
+    //Convert from bytes to hex
+    let s_in_hex = hex::encode(bytes);
+    String::from(s_in_hex)
+}
+
+
 pub fn string_to_hex(s: &str)-> String {
     hex::encode(s)
 }

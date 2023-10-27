@@ -166,7 +166,7 @@ fn main() {
         //let text=String::from("abcdefgh");
         let mut consecutive_hamming_distance: Vec<i32> =vec![];
         for piece in text.chars() {
-            if buffer_1.len() == keysize{
+             if buffer_1.len() == keysize{
                 if buffer_2.len() == keysize {
                     let d=hamming_distance(&string_to_hex(&buffer_1), &string_to_hex(&buffer_2));
                     consecutive_hamming_distance.push(d);
@@ -201,8 +201,36 @@ fn main() {
         }
     }
     println!("{}", min);
-    let index = avg_hamming_distance.iter().position(|&r| r == min).unwrap();
-    println!("The probable keysize is {}", index);
+    let keysize = avg_hamming_distance.iter().position(|&r| r == min).unwrap();
+    println!("The probable keysize is {}.", keysize);//The keysize refers to the text in base64, though to obtain this keysize we worked in hexa.
+
+
+    //Now I am going to take the ciphered text and divide it in blocks of lenght keysize and transpose those block  
+   
+   //Number of blocks of lenght keysize:
+   let n_blocks= text.len()/keysize;
+   //length of the remainder part of the block that may have size less than keysize.
+   let remainder = text.len() % keysize;
+   
+   println!("Number of blocks {}. \nLength of the remainder {}.",n_blocks, remainder);
+
+   let mut char_iterator= text.chars(); //creating iterator
+   let mut text_per_block: Vec<String> =vec![];
+   for i in 0..(n_blocks+1) { // with n_block+1 we make sure the remainder will be the last entry in the vector with blocks.
+        let mut  a=String::new();
+        for _ in (i*keysize)..((i+1)*keysize){
+            if let Some(ch) =char_iterator.next()  {
+                a.push_str(&String::from(ch));   
+            } else {
+                println!("No more characters");
+                break
+            }
+        }
+        text_per_block.push(a);
+   }
+   println!("{:?}",text_per_block);
+
+   //Now the aim is to get the transpose of text_per_blocks.
 }
 
     
