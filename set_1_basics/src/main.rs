@@ -216,21 +216,41 @@ fn main() {
 
    let mut char_iterator= text.chars(); //creating iterator
    let mut text_per_block: Vec<String> =vec![];
-   for i in 0..(n_blocks+1) { // with n_block+1 we make sure the remainder will be the last entry in the vector with blocks.
+    for i in 0..(n_blocks+1) { // with n_block+1 we make sure the remainder will be the last entry in the vector with blocks.
         let mut  a=String::new();
         for _ in (i*keysize)..((i+1)*keysize){
             if let Some(ch) =char_iterator.next()  {
-                a.push_str(&String::from(ch));   
+                if ch == '\r' || ch == '\n'{
+
+                }
+                else {
+                    a.push_str(&String::from(ch));   
+                }
             } else {
-                println!("No more characters");
+                //println!("No more characters");
                 break
             }
         }
         text_per_block.push(a);
-   }
-   println!("{:?}",text_per_block);
+    }
+    println!("{:?}",text_per_block);
 
-   //Now the aim is to get the transpose of text_per_blocks.
+    //Now the aim is to get the transpose of this.
+    let mut text_per_block_transpose: Vec<String> = vec![];
+    for j in 0..text_per_block[0].len(){ // "columns index" 
+        let mut a=String::new();
+        for i in 0..text_per_block.len(){ // "rows index"
+            if let Some(ch)=text_per_block[i].chars().nth(j){
+                //println!("This should be changing {:?}",ch);
+                let ch=String::from(ch);
+                a.push_str(&ch);
+            }
+        }
+        text_per_block_transpose.push(a);
+    }
+    println!("Text per blocks transposed {:?}", text_per_block_transpose);
+    //println!("{}",text_per_block_transpose.len());    
+
 }
 
     
