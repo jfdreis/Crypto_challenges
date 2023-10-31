@@ -1,5 +1,7 @@
 use base64::{Config, CharacterSet, encode_config};
 use std::str;
+use std::fs;
+
 
 
 pub fn hex_to_base64 (s: &str)-> String { //want &str because I do not need ownership of the string
@@ -32,6 +34,17 @@ pub fn base64_to_hex (s: &str)-> String { //want &str because I do not need owne
     String::from(s_in_hex)
 }
 
+pub fn base64_to_bytes (s: &str)-> Vec<u8>{ //want &str because I do not need ownership of the string
+    //Convert this string to bytes.
+    //Note that decode returns a a Result<Vec<u>> we need to take handle the error case.
+    match base64::decode(s){
+        Ok(bytes) => bytes,
+        Err(_) => {
+            println!("There was an error converting");
+            Vec::new()//return an empty vector
+        }
+    }
+}
 
 pub fn string_to_hex(s: &str)-> String {
     hex::encode(s)
@@ -67,6 +80,20 @@ pub fn cyclic_repeat(s: &str, desired_length: usize) -> String {
     let result = format!("{}{}", repeated, remainder_part);
 
     result
+}
+pub fn cyclic_repeat_bytes(s: &Vec<u8>, desired_length: usize) -> Vec<u8> {
+    let s_len = s.len();
+    if s_len == 0 || desired_length == 0 {
+        return Vec::new();
+    }
+    let repetitions = desired_length / s_len;
+    let remainder = desired_length % s_len;
+
+    let mut repeated = s.repeat(repetitions);
+    let remainder_part = &s[0..remainder];
+
+    repeated.extend(remainder_part);
+    repeated
 }
 
 pub fn hex_to_ascii(s: &str) -> String {
@@ -107,6 +134,7 @@ pub fn xor_hexa_bytes_get_string(s: &str, v: &Vec<u8>)-> Option<String>{
         None
     }
 }
+
 
 
 
@@ -159,16 +187,18 @@ pub fn letters_space_in_u8()->Vec<u8>{
 
 
 //Function to determine Hamming distance
-pub fn hamming_distance(s: &str,t: &str)-> i32 {
-
-    
-    //convert hexadecimal to bytes
-    let s_bytes = hex::decode(&s).expect("Invalid hexadecimal base input");
-    let t_bytes = hex::decode(&t).expect("Invalid hexadecimal base input");
+pub fn hamming_distance(s: &Vec<u8>,t: &Vec<u8>)-> i32 {
     
     // Perform the XOR operation on each pair of bytes.
-    let xor_result: Vec<u8> = s_bytes.iter().zip(&t_bytes).map(|(a, b)| a ^ b).collect();
+    let xor_result: Vec<u8> = s.iter().zip(t).map(|(a, b)| a ^ b).collect();
     let distance = xor_result.iter().map(|b| b.count_ones() as i32).sum();
     distance
 
+}
+
+
+pub fn read_base64_file_as_bytes(file_path: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    // Read the file as bytes
+    let contents = fs::read(file_path)?;
+    Ok(contents)
 }
